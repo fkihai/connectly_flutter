@@ -1,13 +1,20 @@
 import 'package:connectly_flutter/core/utils/constant.dart';
 import 'package:connectly_flutter/core/widgets/button_custom.dart';
 import 'package:connectly_flutter/core/widgets/text_custom.dart';
+import 'package:connectly_flutter/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:connectly_flutter/features/auth/presentation/bloc/auth_event.dart';
+import 'package:connectly_flutter/features/auth/presentation/bloc/auth_state.dart';
 import 'package:connectly_flutter/features/auth/presentation/widgets/password_field.dart';
 import 'package:connectly_flutter/features/auth/presentation/widgets/username_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -89,16 +96,67 @@ class LoginScreen extends StatelessWidget {
                       color: ksecondaryColor,
                     ),
                     SizedBox(height: 60.h),
-                    UsernameField(),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        final error = state is LoginFailure;
+                        if (error) {
+                          return Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red.shade900,
+                                      size: 20.r,
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    TextCustom(
+                                      "login failed! ${state.message}",
+                                      align: TextAlign.start,
+                                      size: 14.sp,
+                                      weight: FontWeight.w500,
+                                      color: Colors.red.shade900,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20.h),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                    UsernameField(controller: _usernameController),
                     SizedBox(height: 20.h),
-                    PasswordField(),
+                    PasswordField(controller: _passwordController),
                     SizedBox(height: 80.h),
-                    ButtonCustom(
-                      title: "SIGN IN",
-                      height: 40,
-                      width: double.infinity,
-                      fontWeight: FontWeight.w600,
-                      borderRadius: BorderRadius.circular(10.r),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (BuildContext context, AuthState state) {
+                        final loading = state is LoginLoading;
+                        if (loading) {
+                          return CircularProgressIndicator();
+                        } else {
+                          return ButtonCustom(
+                            title: "SIGN IN",
+                            height: 40,
+                            width: double.infinity,
+                            fontWeight: FontWeight.w600,
+                            borderRadius: BorderRadius.circular(10.r),
+                            onPressed: () {
+                              context.read<AuthBloc>().add(
+                                LoginButtonOnPressed(
+                                  _usernameController.text,
+                                  _passwordController.text,
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
