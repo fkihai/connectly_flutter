@@ -1,5 +1,4 @@
 import 'package:connectly_flutter/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:connectly_flutter/features/auth/presentation/pages/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +23,13 @@ class MyApp extends StatelessWidget {
       designSize: Size(1440, 1024),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(home: LoginScreen()),
+      child: MaterialApp.router(),
     );
   }
 }
+
+
+/*
+TODO:
+- router helper and redirect (only per root)
+*/
