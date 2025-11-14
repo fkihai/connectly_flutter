@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(LoginInitial()) {
     on<LoginButtonOnPressed>(_onPressed);
+    on<CheckAunthenticated>(_onCheck);
   }
 
   Future<void> _onPressed(
@@ -40,10 +41,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final token = await SecureStorage().read(key: 'token');
       debugPrint("this token : $token");
 
-      emit(LoginSuccess(token: t));
+      emit(LoginSuccess());
     } catch (e) {
       emit(LoginFailure("login failed"));
       debugPrint("error login: $e");
+    }
+  }
+
+  Future<void> _onCheck(
+    CheckAunthenticated event,
+    Emitter<AuthState> emit,
+  ) async {
+    final token = await SecureStorage().read(key: 'token');
+    if (token != null) {
+      emit(LoginSuccess());
+    } else {
+      emit(LoginInitial());
     }
   }
 }

@@ -12,3 +12,7 @@ class LoginButtonOnPressed extends AuthEvent {
 
   const LoginButtonOnPressed(this.username, this.password);
 }
+
+class CheckAunthenticated extends AuthEvent {}
+
+class Testauth extends AuthEvent {}

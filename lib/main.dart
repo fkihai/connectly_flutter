@@ -1,3 +1,4 @@
+import 'package:connectly_flutter/core/router/router.dart';
 import 'package:connectly_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       designSize: Size(1440, 1024),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp.router(),
+      child: MaterialApp.router(routerConfig: router),
     );
   }
 }

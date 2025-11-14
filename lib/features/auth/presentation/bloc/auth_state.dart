@@ -1,4 +1,3 @@
-import 'package:connectly_flutter/features/auth/domain/entities/token_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class AuthState extends Equatable {
@@ -11,12 +10,7 @@ class LoginInitial extends AuthState {}
 
 class LoginLoading extends AuthState {}
 
-class LoginSuccess extends AuthState {
-  final TokenEntity token;
-  const LoginSuccess({required this.token});
-  @override
-  List<Object> get props => [token];
-}
+class LoginSuccess extends AuthState {}
 
 class LoginFailure extends AuthState {
   const LoginFailure(this.message);
